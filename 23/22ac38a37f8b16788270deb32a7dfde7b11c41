@@ -1,0 +1,26 @@
+R/process.R
+  s_6eb8bff9924e90::t_7961fb2f877776 35-36
+  s_6eb8bff9924e90::t_b52fa07b0e0fa9 15-16,31-34,37,39
+R/cl_parse.R
+  s_6eb8bff9924e90::t_b52fa07b0e0fa9 21-24,29-32,34-39
+  s_6eb8bff9924e90::t_7961fb2f877776 33
+R/viz.R
+  s_6eb8bff9924e90::t_b52fa07b0e0fa9 15-24,27-28,31
+  s_6eb8bff9924e90::t_722e540472c4b0 25-26,29-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "2322ac38a37f8b16788270deb32a7dfde7b11c41",
+  "prompts": {},
+  "sessions": {
+    "s_6eb8bff9924e90": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019eb6c2-ad4f-7103-a3b6-36a9aa71f529",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
