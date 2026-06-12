@@ -1,0 +1,21 @@
+tests.R
+  s_6f49fa1dc7542b::t_4605539857781c 60-61
+R/cl_parse.R
+  s_6f49fa1dc7542b::t_4605539857781c 35-36,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "7b3a00b92ca8b217b6f94eb615daa533e457b44f",
+  "prompts": {},
+  "sessions": {
+    "s_6f49fa1dc7542b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019ebad6-509a-75e1-ad75-f1bf2ef914e4",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
