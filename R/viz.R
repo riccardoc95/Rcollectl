@@ -28,6 +28,8 @@ vizdf = function(x, tz="EST") {
      ans = rbind(ans, data.frame(tm=x$sampdate, xtype="PROCESS", pos="bot",
        value=cumsum(replace(x$PROC_WKB, is.na(x$PROC_WKB), 0)),
        type="Cumul KB process write"))
+
+   ans$type <- factor(ans$type, levels = unique(ans$type))
    ans
 }
 
@@ -41,5 +43,9 @@ vizdf = function(x, tz="EST") {
 #' @export
 plot_usage = function(x) {
   ggplot(vizdf(x), aes(x=tm, y=value)) + geom_point() +
-          facet_grid(vars(type), scales="free")
+          facet_grid(vars(type), scales="free") +
+          theme(
+              strip.text.y = element_text(size = 9),
+              strip.text.y.left = element_text(angle = 0)
+          )
 }
