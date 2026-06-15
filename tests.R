@@ -25,6 +25,20 @@ save_plot <- function(plot, name) {
   check(file.exists(path), paste(name, "plot is saved to", path))
 }
 
+burn_cpu <- function(seconds=5) {
+  deadline <- proc.time()[["elapsed"]] + seconds
+  iterations <- 0L
+  result <- 0
+
+  while (proc.time()[["elapsed"]] < deadline) {
+    result <- result + sum(sqrt(seq_len(1e5)))
+    iterations <- iterations + 1L
+  }
+
+  cat("CPU workload completed", iterations, "iterations\n")
+  invisible(result)
+}
+
 cat("Testing existing parsing and plotting...\n")
 demo <- "inst/demotab/demo_1123.tab.gz"
 legacy <- cl_parse(demo)
@@ -51,9 +65,10 @@ run_live_test <- function(pid=NULL) {
       cl_stop(proc)
   }, add=TRUE)
 
+  burn_cpu()
   x <- rnorm(2e7)
   invisible(sum(x))
-  Sys.sleep(3)
+  Sys.sleep(2)
   cl_stop(proc)
   Sys.sleep(2)
 
@@ -71,6 +86,8 @@ run_live_test <- function(pid=NULL) {
       "process output file exists")
     check(any(grepl("^PROC_", names(result))), "process columns are present")
     check("PROC_Pct" %in% names(result), "process CPU column is present")
+    check(any(result$PROC_Pct > 0, na.rm=TRUE),
+      "process CPU activity was recorded")
     check("PROC_RSS" %in% names(result), "process RSS column is present")
     check(any(grepl("process", vizdf(result)$type)),
       "process metrics are present in plot data")
