@@ -49,8 +49,10 @@ cl_parse_process <- function(path, tz = "EST") {
   dat[metrics] <- lapply(dat[metrics], \(x) {
     x <- as.character(x)
     s <- ifelse(grepl("[KMGT]$", x), sub(".*([KMGT])$", "\\1", x), "")
-    as.numeric(sub("[KMGT]$", "", x)) *
-      c("" = 1, K = 1024, M = 1024^2, G = 1024^3, T = 1024^4)[s]
+    multiplier <- c(1, 1024, 1024^2, 1024^3, 1024^4)[
+      match(s, c("", "K", "M", "G", "T"))
+    ]
+    as.numeric(sub("[KMGT]$", "", x)) * multiplier
   })
 
   aggregate(dat[metrics], list(sampdate = dat$sampdate), sum, na.rm = TRUE)
