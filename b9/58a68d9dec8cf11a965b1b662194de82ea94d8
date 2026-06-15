@@ -1,0 +1,19 @@
+R/viz.R
+  s_fbfe9caba47a05::t_f1284cc516bfdc 3-31,43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "b958a68d9dec8cf11a965b1b662194de82ea94d8",
+  "prompts": {},
+  "sessions": {
+    "s_fbfe9caba47a05": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019eca43-5112-7dc0-8222-223b3e247ffd",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
