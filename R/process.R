@@ -33,7 +33,7 @@ cl_start = function(target = tempfile(), pid = NULL) {
         paste0("p", pid, ",P", pid), paste("-f", target, sep=""))
     proc = try(processx::process$new("collectl", args=args))
     ans = list(process=proc, target=target, node_name=Sys.info()[["nodename"]],
-        date=format(Sys.Date(), "%Y%m%d"))
+        date=format(Sys.Date(), "%Y%m%d"), pid=pid)
     class(ans) = "Rcollectl_process"
     ans
 }
