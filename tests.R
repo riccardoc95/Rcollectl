@@ -39,28 +39,28 @@ burn_cpu <- function(seconds=5) {
   invisible(result)
 }
 
-exercise_io <- function(megabytes=64) {
+exercise_io <- function(megabytes=64, read_passes=8) {
+  stopifnot(Sys.info()[["sysname"]] == "Linux", nzchar(Sys.which("dd")))
   path <- tempfile(pattern="Rcollectl-io-")
   on.exit(unlink(path), add=TRUE)
-  block <- as.raw(rep(0:255, length.out=1024^2))
 
-  connection <- file(path, open="wb")
-  for (i in seq_len(megabytes))
-    writeBin(block, connection)
-  close(connection)
+  write_status <- system2("dd", c(
+    "if=/dev/zero", paste0("of=", path), "bs=1M",
+    paste0("count=", megabytes), "oflag=direct", "status=none"
+  ))
+  stopifnot(write_status == 0)
 
-  connection <- file(path, open="rb")
-  bytes_read <- 0
-  repeat {
-    data <- readBin(connection, what="raw", n=length(block))
-    bytes_read <- bytes_read + length(data)
-    if (length(data) < length(block))
-      break
+  for (i in seq_len(read_passes)) {
+    read_status <- system2("dd", c(
+      paste0("if=", path), "of=/dev/null", "bs=1M",
+      "iflag=direct", "status=none"
+    ))
+    stopifnot(read_status == 0)
   }
-  close(connection)
 
-  cat("I/O workload wrote and read", bytes_read / 1024^2, "MB\n")
-  invisible(bytes_read)
+  cat("Direct I/O workload wrote", megabytes, "MB and read",
+    megabytes * read_passes, "MB\n")
+  invisible(megabytes * read_passes * 1024^2)
 }
 
 cat("Testing existing parsing and plotting...\n")
@@ -115,6 +115,8 @@ run_live_test <- function(pid=NULL) {
       "process CPU activity was recorded")
     check("PROC_RSS" %in% names(result), "process RSS column is present")
     check("PROC_RKB" %in% names(result), "process read column is present")
+    check(any(result$PROC_RKB > 0, na.rm=TRUE),
+      "process read activity was recorded")
     check("PROC_WKB" %in% names(result), "process write column is present")
     check(any(result$PROC_WKB > 0, na.rm=TRUE),
       "process write activity was recorded")
