@@ -31,21 +31,6 @@ traffic.  There is no standard portable approach to measuring these.  In this pa
 on linux systems measurement with
 the [collectl](http://collectl.sourceforge.net/index.html) suite of tools.  
 
-## Monitoring a process by PID
-
-Pass `pid = "current"` to monitor the current R process and its children:
-
-```r
-monitor = cl_start(pid = "current")
-# run the code to monitor
-cl_stop(monitor)
-usage = cl_parse(cl_result_path(monitor))
-```
-
-A numeric process ID can be supplied instead.  When PID monitoring is enabled,
-`cl_parse()` adds process CPU, memory, read, and write metrics in columns whose
-names start with `PROC_`.
-
 ## Notes from the AnVIL workspace description
 
 Our objective in this workspace is demonstration of instrumentation of
@@ -213,6 +198,21 @@ reduce the number of threads per sample, but run 4 samples at once via snakemake
 It seems the throughput is a bit better here, but we should check the comparability
 of results of the different approaches before declaring this.
 
+## Monitoring a process by PID
+
+Pass `pid = "current"` to monitor the current R process and its children:
+
+```r
+monitor = cl_start(pid = "current")
+# run the code to monitor
+cl_stop(monitor)
+usage = cl_parse(cl_result_path(monitor))
+```
+
+A numeric process ID can be supplied instead.  When PID monitoring is enabled,
+`cl_parse()` adds process CPU, memory, read, and write metrics in columns whose
+names start with `PROC_`.
+
 ## Conclusions
 
 Rcollectl can be used to obtain useful profiling information on AnVIL interactive work.  We saw
@@ -229,5 +229,3 @@ to manage the execution approach.
 Furthermore, as we define the self-describing representation of the read
 data in Bioconductor, we should consider how it maps to the AnVIL/Terra-native
 structures related to the workspace data tables, and DRS.
-
-
