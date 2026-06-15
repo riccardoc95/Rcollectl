@@ -21,7 +21,7 @@ check <- function(ok, message) {
 
 save_plot <- function(plot, name) {
   path <- file.path(plot_dir, paste0(name, ".png"))
-  ggsave(path, plot=plot, width=10, height=8, dpi=150)
+  ggsave(path, plot=plot, width=10, height=10, dpi=150)
   check(file.exists(path), paste(name, "plot is saved to", path))
 }
 
