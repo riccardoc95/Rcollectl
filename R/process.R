@@ -26,12 +26,16 @@ cl_exists = function() {
 #'   zz$process$is_alive()
 #' }
 #' @export
-cl_start = function(target = tempfile()) {
- proc = try(processx::process$new("collectl", args=c("-scdmn", "-P", paste("-f", target, sep=""))))
- ans = list(process=proc, target=target, node_name=Sys.info()[["nodename"]],
-  date=format(Sys.Date(), "%Y%m%d"))
- class(ans) = "Rcollectl_process"
- ans
+cl_start = function(target = tempfile(), pid = NULL) {
+    args = c("-scdmn", "-P", paste("-f", target, sep=""))
+    if (!is.null(pid))
+    args = c("-scdmnZ", "-P", "-i1:1", "--procfilt",
+        paste0("p", pid, ",P", pid), paste("-f", target, sep=""))
+    proc = try(processx::process$new("collectl", args=args))
+    ans = list(process=proc, target=target, node_name=Sys.info()[["nodename"]],
+        date=format(Sys.Date(), "%Y%m%d"))
+    class(ans) = "Rcollectl_process"
+    ans
 }
 
 #' print method for Rcollectl process
