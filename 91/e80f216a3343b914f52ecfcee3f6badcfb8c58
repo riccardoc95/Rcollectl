@@ -1,0 +1,19 @@
+R/process.R
+  s_fbfe9caba47a05::t_d159348389e478 15-16,32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "91e80f216a3343b914f52ecfcee3f6badcfb8c58",
+  "prompts": {},
+  "sessions": {
+    "s_fbfe9caba47a05": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019eca43-5112-7dc0-8222-223b3e247ffd",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
