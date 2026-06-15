@@ -12,6 +12,8 @@ cl_exists = function() {
 #' start collectl if possible
 #' @importFrom processx process
 #' @param target character(1) path; destination of collectl report
+#' @param pid process id to monitor with its children; use `"current"` for the
+#' current R process
 #' @return instance of `Rcollectl_process` with components `process` (a processx R6 instance) and
 #' `target` (a file path where collectl results will be written)
 #' @examples
@@ -27,6 +29,7 @@ cl_exists = function() {
 #' }
 #' @export
 cl_start = function(target = tempfile(), pid = NULL) {
+    if (identical(pid, "current")) pid = Sys.getpid()
     args = c("-scdmn", "-P", paste("-f", target, sep=""))
     if (!is.null(pid))
     args = c("-scdmnZ", "-P", "-i1:1", "--procfilt",
