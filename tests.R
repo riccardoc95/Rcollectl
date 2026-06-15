@@ -39,6 +39,30 @@ burn_cpu <- function(seconds=5) {
   invisible(result)
 }
 
+exercise_io <- function(megabytes=64) {
+  path <- tempfile(pattern="Rcollectl-io-")
+  on.exit(unlink(path), add=TRUE)
+  block <- as.raw(rep(0:255, length.out=1024^2))
+
+  connection <- file(path, open="wb")
+  for (i in seq_len(megabytes))
+    writeBin(block, connection)
+  close(connection)
+
+  connection <- file(path, open="rb")
+  bytes_read <- 0
+  repeat {
+    data <- readBin(connection, what="raw", n=length(block))
+    bytes_read <- bytes_read + length(data)
+    if (length(data) < length(block))
+      break
+  }
+  close(connection)
+
+  cat("I/O workload wrote and read", bytes_read / 1024^2, "MB\n")
+  invisible(bytes_read)
+}
+
 cat("Testing existing parsing and plotting...\n")
 demo <- "inst/demotab/demo_1123.tab.gz"
 legacy <- cl_parse(demo)
@@ -66,6 +90,7 @@ run_live_test <- function(pid=NULL) {
   }, add=TRUE)
 
   burn_cpu()
+  exercise_io()
   x <- rnorm(2e7)
   invisible(sum(x))
   Sys.sleep(2)
@@ -89,6 +114,13 @@ run_live_test <- function(pid=NULL) {
     check(any(result$PROC_Pct > 0, na.rm=TRUE),
       "process CPU activity was recorded")
     check("PROC_RSS" %in% names(result), "process RSS column is present")
+    check("PROC_RKB" %in% names(result), "process read column is present")
+    check("PROC_WKB" %in% names(result), "process write column is present")
+    check(any(result$PROC_WKB > 0, na.rm=TRUE),
+      "process write activity was recorded")
+    cat("Recorded process I/O:",
+      sum(result$PROC_RKB, na.rm=TRUE), "KB read,",
+      sum(result$PROC_WKB, na.rm=TRUE), "KB written\n")
     check(any(grepl("process", vizdf(result)$type)),
       "process metrics are present in plot data")
   }
